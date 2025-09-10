@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Churn Prediction</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900">Customer Churn Prediction</h1>
+            <p class="text-lg text-gray-600 mt-2">An ML project to predict customer churn based on their data.</p>
+        </header>
+
+        <main class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="bg-white p-8 rounded-2xl shadow-lg">
+                <h2 class="text-2xl font-semibold mb-6">Predict Churn for a New Customer</h2>
+                <form id="prediction-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <div class="md:col-span-2">
+                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                            Predict Churn
+                        </button>
+                    </div>
+                </form>
+                
+                <div id="prediction-result" class="mt-8 p-6 bg-gray-50 rounded-lg text-center hidden">
+                    <h3 class="text-xl font-semibold">Prediction Result</h3>
+                    <p class="text-5xl font-bold my-4" id="churn-status"></p>
+                    <p class="text-lg text-gray-600" id="churn-probability"></p>
+                </div>
+            </div>
+
+            <div class="bg-white p-8 rounded-2xl shadow-lg">
+                <h2 class="text-2xl font-semibold mb-6">Add Customer to Database & Retrain Model</h2>
+                <form id="add-customer-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="md:col-span-2">
+                        <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-300">
+                            Add Customer & Retrain
+                        </button>
+                    </div>
+                </form>
+                 <div id="add-customer-status" class="mt-8 p-4 bg-green-100 text-green-800 rounded-lg text-center hidden">
+                    </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const formFields = [
+            { name: "gender", label: "Gender", type: "select", options: ["Male", "Female"] },
+            { name: "senior_citizen", label: "Senior Citizen", type: "select", options: [0, 1] },
+            { name: "partner", label: "Partner", type: "select", options: ["Yes", "No"] },
+            { name: "dependents", label: "Dependents", type: "select", options: ["Yes", "No"] },
+            { name: "tenure", label: "Tenure (Months)", type: "number", value: 12 },
+            { name: "phone_service", label: "Phone Service", type: "select", options: ["Yes", "No"] },
+            { name: "multiple_lines", label: "Multiple Lines", type: "select", options: ["Yes", "No", "No phone service"] },
+            { name: "internet_service", label: "Internet Service", type: "select", options: ["DSL", "Fiber optic", "No"] },
+            { name: "online_security", label: "Online Security", type: "select", options: ["Yes", "No", "No internet service"] },
+            { name: "online_backup", label: "Online Backup", type: "select", options: ["Yes", "No", "No internet service"] },
+            { name: "device_protection", label: "Device Protection", type: "select", options: ["Yes", "No", "No internet service"] },
+            { name: "tech_support", label: "Tech Support", type: "select", options: ["Yes", "No", "No internet service"] },
+            { name: "streaming_tv", label: "Streaming TV", type: "select", options: ["Yes", "No", "No internet service"] },
+            { name: "streaming_movies", label: "Streaming Movies", type: "select", options: ["Yes", "No", "No internet service"] },
+            { name: "contract", label: "Contract", type: "select", options: ["Month-to-month", "One year", "Two year"] },
+            { name: "paperless_billing", label: "Paperless Billing", type: "select", options: ["Yes", "No"] },
+            { name: "payment_method", label: "Payment Method", type: "select", options: ["Electronic check", "Mailed check", "Bank transfer (automatic)", "Credit card (automatic)"] },
+            { name: "monthly_charges", label: "Monthly Charges ($)", type: "number", value: 70.0 },
+            { name: "total_charges", label: "Total Charges ($)", type: "number", value: 700.0 },
+        ];
+
+        function createField(field) {
+            const container = document.createElement('div');
+            const label = document.createElement('label');
+            label.className = "block text-sm font-medium text-gray-700 mb-1";
+            label.htmlFor = field.name;
+            label.textContent = field.label;
+            container.appendChild(label);
+            
+            if (field.type === 'select') {
+                const select = document.createElement('select');
+                select.name = field.name;
+                select.id = field.name;
+                select.className = "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md";
+                field.options.forEach(opt => {
+                    const option = document.createElement('option');
+                    option.value = opt;
+                    option.textContent = opt;
+                    select.appendChild(option);
+                });
+                container.appendChild(select);
+            } else { // number or text
+                const input = document.createElement('input');
+                input.type = field.type;
+                input.name = field.name;
+                input.id = field.name;
+                input.value = field.value || '';
+                input.className = "mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md";
+                container.appendChild(input);
+            }
+            return container;
+        }
+
+        const predictionForm = document.getElementById('prediction-form');
+        const addCustomerForm = document.getElementById('add-customer-form');
+        
+        // Populate Prediction Form
+        formFields.forEach(field => {
+            predictionForm.insertBefore(createField(field), predictionForm.lastElementChild.previousElementSibling);
+        });
+
+        // Populate Add Customer Form (with churn field)
+        const addCustomerFields = [...formFields, { name: "churn", label: "Churn", type: "select", options: ["Yes", "No"] }];
+        addCustomerFields.forEach(field => {
+             addCustomerForm.insertBefore(createField(field), addCustomerForm.lastElementChild.previousElementSibling);
+        });
+        
+        // Handle Prediction
+        predictionForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(predictionForm);
+            const data = Object.fromEntries(formData.entries());
+
+            // Convert numeric types
+            data.senior_citizen = parseInt(data.senior_citizen);
+            data.tenure = parseInt(data.tenure);
+            data.monthly_charges = parseFloat(data.monthly_charges);
+            data.total_charges = parseFloat(data.total_charges);
+
+            const response = await fetch('/predict', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            const resultDiv = document.getElementById('prediction-result');
+            const statusP = document.getElementById('churn-status');
+            const probP = document.getElementById('churn-probability');
+
+            if (result.error) {
+                 statusP.textContent = 'Error';
+                 statusP.className = "text-5xl font-bold my-4 text-red-600";
+                 probP.textContent = result.error;
+            } else {
+                statusP.textContent = `Churn: ${result.churn}`;
+                probP.textContent = `Probability of Churning: ${result.probability}`;
+                if (result.churn === 'Yes') {
+                    statusP.className = "text-5xl font-bold my-4 text-red-600";
+                } else {
+                    statusP.className = "text-5xl font-bold my-4 text-green-600";
+                }
+            }
+            resultDiv.classList.remove('hidden');
+        });
+
+        // Handle Add Customer
+        addCustomerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(addCustomerForm);
+            const data = Object.fromEntries(formData.entries());
+
+            // Convert numeric types
+            data.senior_citizen = parseInt(data.senior_citizen);
+            data.tenure = parseInt(data.tenure);
+            data.monthly_charges = parseFloat(data.monthly_charges);
+            data.total_charges = parseFloat(data.total_charges);
+
+            const response = await fetch('/add_customer', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await response.json();
+            const statusDiv = document.getElementById('add-customer-status');
+            statusDiv.textContent = result.message || result.error;
+            statusDiv.classList.remove('hidden');
+        });
+
+    </script>
+</body>
+</html>
