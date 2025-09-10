@@ -3,55 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Churn Prediction</title>
+    <title>Live Customer Churn Predictor</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
+        body { font-family: 'Inter', sans-serif; }
+        .form-select, .form-input {
+            transition: all 0.2s ease-in-out;
         }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-800">
+<body class="bg-slate-50 text-slate-800">
 
-    <div class="container mx-auto p-4 md:p-8">
-        <header class="text-center mb-10">
-           <h1 class="text-4xl md:text-5xl font-bold text-gray-900">Live Customer Churn Predictor v2.0</h1>
-            <p class="text-lg text-gray-600 mt-2">An ML project to predict customer churn based on their data.</p>
+    <div class="container mx-auto max-w-7xl px-4 py-8 md:py-12">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight">Live Customer Churn Predictor</h1>
+            <p class="text-lg text-slate-600 mt-3 max-w-2xl mx-auto">An interactive ML application demonstrating a real-time prediction and retraining pipeline.</p>
         </header>
 
-        <main class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div class="bg-white p-8 rounded-2xl shadow-lg">
-                <h2 class="text-2xl font-semibold mb-6">Predict Churn for a New Customer</h2>
-                <form id="prediction-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    
-                    <div class="md:col-span-2">
-                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300">
-                            Predict Churn
+        <!-- Main Grid -->
+        <main class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+            
+            <!-- Prediction Card -->
+            <div class="lg:col-span-3 bg-white p-8 rounded-2xl shadow-lg border border-slate-200">
+                <h2 class="text-2xl font-semibold mb-6 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-600 mr-3"><path d="m9.06 2.2 7.88 7.88M11.28 21.78 2.2 12.7a1 1 0 0 1 0-1.42l8.4-8.4a1 1 0 0 1 1.42 0l8.4 8.4a1 1 0 0 1 0 1.42l-8.4 8.4a1 1 0 0 1-1.42 0Z"/><path d="m14.5 7.5 3 3"/><path d="M5 12.7 2.2 15.5"/><path d="m11.28 21.78 2.82-2.82"/></svg>
+                    <span>Predict Churn for a New Customer</span>
+                </h2>
+                <form id="prediction-form" class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
+                    <!-- Form fields dynamically generated here -->
+                    <div class="md:col-span-2 mt-4">
+                        <button type="submit" class="w-full h-12 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition-all transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-indigo-300 flex items-center justify-center">
+                            <span class="button-text">Predict Churn</span>
+                            <div class="spinner hidden w-5 h-5 border-2 border-t-transparent border-white rounded-full animate-spin"></div>
                         </button>
                     </div>
                 </form>
                 
-                <div id="prediction-result" class="mt-8 p-6 bg-gray-50 rounded-lg text-center hidden">
-                    <h3 class="text-xl font-semibold">Prediction Result</h3>
-                    <p class="text-5xl font-bold my-4" id="churn-status"></p>
-                    <p class="text-lg text-gray-600" id="churn-probability"></p>
+                <div id="prediction-result" class="mt-8 p-6 bg-slate-50 rounded-lg text-center hidden border border-slate-200">
+                    <!-- Prediction result here -->
                 </div>
             </div>
 
-            <div class="bg-white p-8 rounded-2xl shadow-lg">
-                <h2 class="text-2xl font-semibold mb-6">Add Customer to Database & Retrain Model</h2>
-                <form id="add-customer-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="md:col-span-2">
-                        <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-300">
-                            Add Customer & Retrain
+            <!-- Side Panel -->
+            <div class="lg:col-span-2 space-y-8">
+                <!-- How it Works Card -->
+                <div class="bg-white p-8 rounded-2xl shadow-lg border border-slate-200">
+                    <h2 class="text-2xl font-semibold mb-6 flex items-center">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-600 mr-3"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                        <span>How It Works</span>
+                    </h2>
+                    <ol class="space-y-4 text-slate-600">
+                        <li class="flex items-start"><span class="font-bold text-indigo-600 mr-3">1.</span> <span>The model is trained live on a sample dataset when the app starts.</span></li>
+                        <li class="flex items-start"><span class="font-bold text-indigo-600 mr-3">2.</span> <span>Submit a new customer's data to get an instant churn prediction.</span></li>
+                        <li class="flex items-start"><span class="font-bold text-indigo-600 mr-3">3.</span> <span>Add a full customer record to the database, which automatically retrains the model with the new data.</span></li>
+                    </ol>
+                </div>
+
+                <!-- Add Customer Card -->
+                <div class="bg-white p-8 rounded-2xl shadow-lg border border-slate-200">
+                    <h2 class="text-2xl font-semibold mb-6 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-600 mr-3"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+                        <span>Add Customer & Retrain Model</span>
+                    </h2>
+                    <p class="text-slate-600 mb-4">Use the main form on the left. Once you have a prediction, add a known "Churn" status (Yes/No) and submit it here.</p>
+                    <form id="add-customer-form" class="space-y-4">
+                        <div>
+                             <label for="churn-status-select" class="block text-sm font-medium text-gray-700 mb-1">Known Churn Status</label>
+                             <select id="churn-status-select" name="churn" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md form-select">
+                                 <option>No</option>
+                                 <option>Yes</option>
+                             </select>
+                        </div>
+                        <button type="submit" class="w-full h-12 bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-4 rounded-lg transition-all transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-teal-300 flex items-center justify-center">
+                            <span class="button-text">Add Customer & Retrain</span>
+                             <div class="spinner hidden w-5 h-5 border-2 border-t-transparent border-white rounded-full animate-spin"></div>
                         </button>
-                    </div>
-                </form>
-                 <div id="add-customer-status" class="mt-8 p-4 bg-green-100 text-green-800 rounded-lg text-center hidden">
-                    </div>
+                    </form>
+                    <div id="add-customer-status" class="mt-4 p-4 text-center hidden rounded-lg"></div>
+                </div>
             </div>
+
         </main>
+        
+        <footer class="text-center mt-12 text-slate-500">
+            <p>Built and Deployed as a Portfolio Project.</p>
+        </footer>
     </div>
 
     <script>
@@ -77,114 +114,146 @@
             { name: "total_charges", label: "Total Charges ($)", type: "number", value: 700.0 },
         ];
 
+        // --- DOM Elements ---
+        const predictionForm = document.getElementById('prediction-form');
+        const addCustomerForm = document.getElementById('add-customer-form');
+        const predictionResultDiv = document.getElementById('prediction-result');
+        const addCustomerStatusDiv = document.getElementById('add-customer-status');
+
+        // --- Utility Functions ---
         function createField(field) {
             const container = document.createElement('div');
             const label = document.createElement('label');
-            label.className = "block text-sm font-medium text-gray-700 mb-1";
+            label.className = "block text-sm font-medium text-slate-700 mb-1";
             label.htmlFor = field.name;
             label.textContent = field.label;
             container.appendChild(label);
             
+            let element;
             if (field.type === 'select') {
-                const select = document.createElement('select');
-                select.name = field.name;
-                select.id = field.name;
-                select.className = "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md";
+                element = document.createElement('select');
                 field.options.forEach(opt => {
                     const option = document.createElement('option');
                     option.value = opt;
                     option.textContent = opt;
-                    select.appendChild(option);
+                    element.appendChild(option);
                 });
-                container.appendChild(select);
-            } else { // number or text
-                const input = document.createElement('input');
-                input.type = field.type;
-                input.name = field.name;
-                input.id = field.name;
-                input.value = field.value || '';
-                input.className = "mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md";
-                container.appendChild(input);
+                element.className = "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md form-select";
+            } else {
+                element = document.createElement('input');
+                element.type = field.type;
+                element.value = field.value || '';
+                element.className = "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md form-input";
             }
+            element.name = field.name;
+            element.id = field.name;
+            container.appendChild(element);
             return container;
         }
-
-        const predictionForm = document.getElementById('prediction-form');
-        const addCustomerForm = document.getElementById('add-customer-form');
         
-        // Populate Prediction Form
+        function toggleSpinner(button, show) {
+            const text = button.querySelector('.button-text');
+            const spinner = button.querySelector('.spinner');
+            if (show) {
+                text.classList.add('hidden');
+                spinner.classList.remove('hidden');
+                button.disabled = true;
+            } else {
+                text.classList.remove('hidden');
+                spinner.classList.add('hidden');
+                button.disabled = false;
+            }
+        }
+
+        // --- Populate Forms ---
         formFields.forEach(field => {
-            predictionForm.insertBefore(createField(field), predictionForm.lastElementChild.previousElementSibling);
-        });
-
-        // Populate Add Customer Form (with churn field)
-        const addCustomerFields = [...formFields, { name: "churn", label: "Churn", type: "select", options: ["Yes", "No"] }];
-        addCustomerFields.forEach(field => {
-             addCustomerForm.insertBefore(createField(field), addCustomerForm.lastElementChild.previousElementSibling);
+            predictionForm.insertBefore(createField(field), predictionForm.lastElementChild);
         });
         
-        // Handle Prediction
+        // --- Event Listeners ---
         predictionForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            const button = e.submitter;
+            toggleSpinner(button, true);
+
             const formData = new FormData(predictionForm);
             const data = Object.fromEntries(formData.entries());
-
-            // Convert numeric types
             data.senior_citizen = parseInt(data.senior_citizen);
             data.tenure = parseInt(data.tenure);
             data.monthly_charges = parseFloat(data.monthly_charges);
             data.total_charges = parseFloat(data.total_charges);
 
-            const response = await fetch('/predict', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-
-            const result = await response.json();
-            const resultDiv = document.getElementById('prediction-result');
-            const statusP = document.getElementById('churn-status');
-            const probP = document.getElementById('churn-probability');
-
-            if (result.error) {
-                 statusP.textContent = 'Error';
-                 statusP.className = "text-5xl font-bold my-4 text-red-600";
-                 probP.textContent = result.error;
-            } else {
-                statusP.textContent = `Churn: ${result.churn}`;
-                probP.textContent = `Probability of Churning: ${result.probability}`;
-                if (result.churn === 'Yes') {
-                    statusP.className = "text-5xl font-bold my-4 text-red-600";
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                
+                let content = '';
+                if (result.error) {
+                    content = `<h3 class="text-xl font-semibold text-red-700">Error</h3><p class="text-slate-600">${result.error}</p>`;
                 } else {
-                    statusP.className = "text-5xl font-bold my-4 text-green-600";
+                    const isChurn = result.churn === 'Yes';
+                    const colorClass = isChurn ? 'text-red-700' : 'text-green-700';
+                    content = `
+                        <h3 class="text-xl font-semibold text-slate-800">Prediction Result</h3>
+                        <p class="text-5xl font-bold my-3 ${colorClass}">${result.churn}</p>
+                        <p class="text-slate-600">Probability of Churn: <strong>${result.probability}</strong></p>
+                    `;
                 }
+                predictionResultDiv.innerHTML = content;
+                predictionResultDiv.classList.remove('hidden');
+
+            } catch (error) {
+                predictionResultDiv.innerHTML = `<h3 class="text-xl font-semibold text-red-700">Error</h3><p class="text-slate-600">Could not connect to the server.</p>`;
+                predictionResultDiv.classList.remove('hidden');
+            } finally {
+                toggleSpinner(button, false);
             }
-            resultDiv.classList.remove('hidden');
         });
 
-        // Handle Add Customer
         addCustomerForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const formData = new FormData(addCustomerForm);
-            const data = Object.fromEntries(formData.entries());
+            const button = e.submitter;
+            toggleSpinner(button, true);
+            
+            const predictionFormData = new FormData(predictionForm);
+            const addCustomerFormData = new FormData(addCustomerForm);
+            const data = Object.fromEntries(predictionFormData.entries());
 
-            // Convert numeric types
+            data.churn = addCustomerFormData.get('churn');
             data.senior_citizen = parseInt(data.senior_citizen);
             data.tenure = parseInt(data.tenure);
             data.monthly_charges = parseFloat(data.monthly_charges);
             data.total_charges = parseFloat(data.total_charges);
+            
+            try {
+                const response = await fetch('/add_customer', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                
+                if (result.message) {
+                    addCustomerStatusDiv.textContent = result.message;
+                    addCustomerStatusDiv.className = 'mt-4 p-4 text-center rounded-lg bg-green-100 text-green-800 border border-green-200';
+                } else {
+                    addCustomerStatusDiv.textContent = result.error || 'An unknown error occurred.';
+                    addCustomerStatusDiv.className = 'mt-4 p-4 text-center rounded-lg bg-red-100 text-red-800 border border-red-200';
+                }
+                addCustomerStatusDiv.classList.remove('hidden');
 
-            const response = await fetch('/add_customer', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-            const result = await response.json();
-            const statusDiv = document.getElementById('add-customer-status');
-            statusDiv.textContent = result.message || result.error;
-            statusDiv.classList.remove('hidden');
+            } catch (error) {
+                addCustomerStatusDiv.textContent = 'Could not connect to the server.';
+                addCustomerStatusDiv.className = 'mt-4 p-4 text-center rounded-lg bg-red-100 text-red-800 border border-red-200';
+            } finally {
+                toggleSpinner(button, false);
+            }
         });
-
     </script>
 </body>
 </html>
+
