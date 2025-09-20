@@ -29,25 +29,31 @@ def predict():
     """Receives customer data and returns a churn prediction."""
     data = request.json
     
-    # Create a DataFrame from the input data
+    # Convert the single dictionary to a DataFrame
     input_df = pd.DataFrame([data])
     
-    # One-Hot Encode categorical features
-    # 'object' columns should be handled; for simplicity, we assume numerical inputs for now
-    # A more robust solution would handle categorical inputs from the form
+    # Ensure numerical columns are the correct type
+    for col in ['tenure', 'monthly_charges', 'total_charges', 'senior_citizen']:
+        if col in input_df.columns:
+            input_df[col] = pd.to_numeric(input_df[col], errors='coerce')
+
+    # One-Hot Encode the DataFrame
     input_df_processed = pd.get_dummies(input_df)
     
-    # Align columns with the training data
+    # Align columns with the training data, filling missing columns with 0
     input_df_aligned = input_df_processed.reindex(columns=model_columns, fill_value=0)
     
     # Make prediction
-    prediction = logistic_model.predict(input_df_aligned)
-    probability = logistic_model.predict_proba(input_df_aligned)
-    
-    churn_status = 'Yes' if prediction[0] == 1 else 'No'
-    churn_probability = f"{probability[0][1]*100:.2f}%"
-    
-    return jsonify({'churn': churn_status, 'probability': churn_probability})
+    try:
+        prediction = logistic_model.predict(input_df_aligned)
+        probability = logistic_model.predict_proba(input_df_aligned)
+        
+        churn_status = 'Yes' if prediction[0] == 1 else 'No'
+        churn_probability = f"{probability[0][1]*100:.2f}%"
+        
+        return jsonify({'churn': churn_status, 'probability': churn_probability})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/segment', methods=['POST'])
 def segment():
