@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Analytics Hub</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: auto; padding: 20px; }
+        h1, h2 { color: #333; }
+        .container { padding: 20px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 20px; }
+        a { display: block; margin-top: 20px; font-size: 1.2em; }
+    </style>
+</head>
+<body>
+    <h1>Customer Analytics Hub</h1>
+
+    <div class="container">
+        <h2>Live Churn Prediction</h2>
+        <p>Predicts if a customer will churn. (API only for this demo)</p>
+    </div>
+
+    <div class="container">
+        <h2>Customer Segmentation</h2>
+        <p>Finds the segment a customer belongs to based on their tenure and monthly charges.</p>
+        <form id="segmentForm">
+            Tenure (months): <input type="number" id="tenure" value="10"><br><br>
+            Monthly Charges ($): <input type="number" id="monthlyCharges" value="50.0"><br><br>
+            <button type="submit">Get Segment</button>
+        </form>
+        <h3 id="segmentResult"></h3>
+    </div>
+
+   <a href="/dashboard">View Full BI Dashboard</a>
+    <script>
+        document.getElementById('segmentForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const tenure = document.getElementById('tenure').value;
+            const monthlyCharges = document.getElementById('monthlyCharges').value;
+            const response = await fetch('/segment', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ 'tenure': parseInt(tenure), 'MonthlyCharges': parseFloat(monthlyCharges) })
+            });
+            const data = await response.json();
+            document.getElementById('segmentResult').innerText = 'Customer Segment: ' + data.segment;
+        });
+    </script>
+</body>
+</html>
