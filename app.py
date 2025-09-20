@@ -1,8 +1,10 @@
 import pandas as pd
 import pickle
 from flask import Flask, request, jsonify, render_template
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 # Load the trained models, scaler, and columns
 with open('logistic_model.pkl', 'rb') as f:
