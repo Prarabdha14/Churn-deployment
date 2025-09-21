@@ -1,0 +1,150 @@
+/* Animated Gradient Background */
+@keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+body {
+    background: linear-gradient(-45deg, #0f172a, #1e293b, #0f172a, #007788);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+}
+
+/* Navigation Styles */
+.nav-link {
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 1.1em;
+    font-weight: 500;
+    margin: 0 20px;
+    padding: 10px 0;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+.nav-link:hover, .nav-link.active {
+    color: white;
+    border-bottom: 2px solid #00e5ff;
+}
+
+/* Hub/Homepage Card Styles */
+.hub-container {
+    text-align: center;
+    padding: 40px 0;
+}
+.hub-card {
+    background: rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(10px) !important;
+    border-radius: 15px !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37) !important;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.hub-button {
+    background: rgba(0, 229, 255, 0.1) !important;
+    color: #00e5ff !important;
+    font-weight: bold !important;
+    border: 1px solid #00e5ff !important;
+}
+.hub-button:hover {
+    background: rgba(0, 229, 255, 0.2) !important;
+}
+
+/* Styles for the About Me corner component */
+.social-icon-small {
+    color: #94a3b8;
+    transition: color 0.3s, transform 0.3s;
+    display: flex;
+    align-items: center;
+}
+.social-icon-small:hover {
+    color: #00e5ff;
+    transform: scale(1.2);
+}
+
+/* Informative Box Style */
+.info-box {
+  background-color: rgba(0, 229, 255, 0.1);
+  border-left: 4px solid #00e5ff;
+  padding: 16px;
+  margin: 20px auto;
+  max-width: 800px;
+  text-align: left;
+  border-radius: 8px;
+}
+
+/* Enhanced Text Styles */
+.main-title {
+  font-weight: bold !important;
+  background: -webkit-linear-gradient(45deg, #00e5ff, #ffffff 80%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0px 0px 15px rgba(0, 229, 255, 0.3);
+}
+
+/* Prediction Page Styles */
+.predict-button {
+    margin-top: 24px !important;
+    padding: 12px 0 !important;
+    width: 100%;
+    background: linear-gradient(45deg, #00e5ff 30%, #00b8d4 90%) !important;
+    color: white !important;
+    font-weight: bold !important;
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(10px) !important;
+    border-radius: 15px !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Styles for smart controls (Select, Switch, TextField) */
+.glass-card .MuiInputLabel-root,
+.glass-card .MuiSelect-select,
+.glass-card .MuiOutlinedInput-root,
+.glass-card .MuiFormControlLabel-root {
+    color: #e2e8f0 !important;
+}
+.glass-card .MuiSelect-icon {
+    color: #94a3b8 !important;
+}
+.glass-card .MuiOutlinedInput-notchedOutline {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+.glass-card .MuiSwitch-track {
+  background-color: #4a5568;
+}
+.MuiCardContent-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+
+/* Dashboard Page Styles */
+.dashboard-container {
+  padding: 40px;
+  text-align: center;
+}
+.dashboard-button {
+  display: inline-block;
+  margin-top: 20px;
+  font-size: 1.5em;
+  padding: 15px 30px;
+  color: white;
+  background: linear-gradient(45deg, #00e5ff 30%, #00b8d4 90%);
+  text-decoration: none;
+  border-radius: 5px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.dashboard-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 10px 20px rgba(0, 229, 255, 0.3);
+}
